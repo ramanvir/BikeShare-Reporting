@@ -50,8 +50,8 @@ def load_data(city, month, day):
 
     trip_count = df.count()[0]
     trip_count = f"{trip_count:,d}"
-    total_trip_duration = df['Trip Duration'].sum()
-    avg_trip_duration = round(df['Trip Duration'].mean(),2)
+    total_trip_duration = round(df['Trip Duration'].sum(),0)
+    avg_trip_duration = round(df['Trip Duration'].mean(),0)
     most_popular_station = df['Start Station'].mode()[0]
     most_popular_destination = df['End Station'].mode()[0]
     most_popular_trip = (df['Start Station'] + ' TO ' + df['End Station']).mode()[0]
@@ -62,7 +62,7 @@ def load_data(city, month, day):
     txt = "A total of {} trips were taken. Avg. trip duration was {} and total trip duration was {}. \nPopular month - {}, Popular day - {}, Popular hour - {}. \nMost popular starting station was {} and most popular destination was {}."
 
     print(txt.format(trip_count, avg_trip_duration, total_trip_duration, most_popular_month, most_popular_day, most_popular_hour, most_popular_station, most_popular_destination))
-    print("Most popular trip was - {}\n".format(most_popular_trip))
+    print("Most popular trip was - {}.\n".format(most_popular_trip))
 
     user_types = df['User Type'].value_counts()
 
@@ -70,6 +70,23 @@ def load_data(city, month, day):
         print('{} {}s took trips.'.format(num, user_type))
 
     print('\n')
+
+    if 'Gender' in df.columns and 'Birth Year' in df.columns:
+
+        gender_stats = df['Gender'].value_counts()
+
+        min_birth_year = int(df['Birth Year'].min())
+        max_birth_year = int(df['Birth Year'].max())
+        common_birth_year = df['Birth Year'].mode()[0].astype(int)
+
+        for gender, num in gender_stats.items():
+            print('{} of {}s took trips.'.format(num, gender))
+
+        print('\n')
+
+        print('Birth year youngest user - {}. Birth year of oldest user - {}. Most common birth year among users - {}.'.format(min_birth_year, max_birth_year, common_birth_year))
+
+        print('\n')
 
     return df
 
